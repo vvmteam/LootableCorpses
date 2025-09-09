@@ -1,12 +1,12 @@
-package com.devConnor.lootableCorpses.managers;
+package com.devconnor.lootablecorpses.managers;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.devConnor.lootableCorpses.LootableCorpses;
-import com.devConnor.lootableCorpses.instances.CorpseEntity;
-import com.devConnor.lootableCorpses.instances.CorpseGui;
-import com.devConnor.lootableCorpses.listeners.AutoRemover;
-import com.devConnor.lootableCorpses.utils.ConfigManager;
+import com.devconnor.lootablecorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.instances.CorpseEntity;
+import com.devconnor.lootablecorpses.instances.CorpseGui;
+import com.devconnor.lootablecorpses.listeners.AutoRemover;
+import com.devconnor.lootablecorpses.utils.ConfigManager;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.Getter;

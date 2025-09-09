@@ -1,4 +1,4 @@
-package com.devConnor.lootableCorpses.instances;
+package com.devconnor.lootablecorpses.instances;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-import static com.devConnor.lootableCorpses.utils.ConfigManager.getInventoryTitle;
+import static com.devconnor.lootablecorpses.utils.ConfigManager.getInventoryTitle;
 
 @Getter
 public class CorpseGui {

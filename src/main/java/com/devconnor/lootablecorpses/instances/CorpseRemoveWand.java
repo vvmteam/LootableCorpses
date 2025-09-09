@@ -1,6 +1,6 @@
-package com.devConnor.lootableCorpses.instances;
+package com.devconnor.lootablecorpses.instances;
 
-import com.devConnor.lootableCorpses.managers.CorpseManager;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

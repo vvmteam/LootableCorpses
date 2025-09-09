@@ -1,6 +1,6 @@
 name: LootableCorpses
 version: '1.0-SNAPSHOT'
-main: com.devConnor.lootableCorpses.LootableCorpses
+main: com.devconnor.lootablecorpses.LootableCorpses
 api-version: '1.19'
 depend: [ProtocolLib]
 commands:

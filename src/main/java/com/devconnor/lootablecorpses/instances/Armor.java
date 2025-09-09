@@ -1,4 +1,4 @@
-package com.devConnor.lootableCorpses.instances;
+package com.devconnor.lootablecorpses.instances;
 
 import lombok.Getter;
 import org.bukkit.Material;

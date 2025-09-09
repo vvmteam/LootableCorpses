@@ -1,10 +1,10 @@
-package com.devConnor.lootableCorpses.instances;
+package com.devconnor.lootablecorpses.instances;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.*;
-import com.devConnor.lootableCorpses.LootableCorpses;
-import com.devConnor.lootableCorpses.managers.PacketManager;
+import com.devconnor.lootablecorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.managers.PacketManager;
 import lombok.Getter;
 import net.minecraft.world.entity.EntityPose;
 import org.bukkit.Bukkit;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.devConnor.lootableCorpses.utils.VersionUtils.isVersionAtLeast;
+import static com.devconnor.lootablecorpses.utils.VersionUtils.isVersionAtLeast;
 
 public class CorpseEntity {
     

@@ -1,6 +1,6 @@
-package com.devConnor.lootableCorpses.listeners;
+package com.devconnor.lootablecorpses.listeners;
 
-import com.devConnor.lootableCorpses.managers.CorpseManager;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

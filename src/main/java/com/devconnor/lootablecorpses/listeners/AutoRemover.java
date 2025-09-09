@@ -1,7 +1,7 @@
-package com.devConnor.lootableCorpses.listeners;
+package com.devconnor.lootablecorpses.listeners;
 
-import com.devConnor.lootableCorpses.LootableCorpses;
-import com.devConnor.lootableCorpses.managers.CorpseManager;
+import com.devconnor.lootablecorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AutoRemover extends BukkitRunnable {

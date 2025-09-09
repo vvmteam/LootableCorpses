@@ -1,14 +1,14 @@
-package com.devConnor.lootableCorpses;
+package com.devconnor.lootablecorpses;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.devConnor.lootableCorpses.listeners.CommandListener;
-import com.devConnor.lootableCorpses.listeners.ConnectListener;
-import com.devConnor.lootableCorpses.listeners.CorpseListener;
-import com.devConnor.lootableCorpses.listeners.PacketListener;
-import com.devConnor.lootableCorpses.managers.CorpseManager;
-import com.devConnor.lootableCorpses.managers.PacketManager;
-import com.devConnor.lootableCorpses.utils.ConfigManager;
+import com.devconnor.lootablecorpses.listeners.CommandListener;
+import com.devconnor.lootablecorpses.listeners.ConnectListener;
+import com.devconnor.lootablecorpses.listeners.CorpseListener;
+import com.devconnor.lootablecorpses.listeners.PacketListener;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
+import com.devconnor.lootablecorpses.managers.PacketManager;
+import com.devconnor.lootablecorpses.utils.ConfigManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

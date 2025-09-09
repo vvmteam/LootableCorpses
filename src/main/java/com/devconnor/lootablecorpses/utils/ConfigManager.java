@@ -1,6 +1,6 @@
-package com.devConnor.lootableCorpses.utils;
+package com.devconnor.lootablecorpses.utils;
 
-import com.devConnor.lootableCorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.LootableCorpses;
 import lombok.experimental.UtilityClass;
 import org.bukkit.configuration.file.FileConfiguration;
 

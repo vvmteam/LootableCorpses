@@ -1,4 +1,4 @@
-package com.devConnor.lootableCorpses.utils;
+package com.devconnor.lootablecorpses.utils;
 
 import org.bukkit.Bukkit;
 

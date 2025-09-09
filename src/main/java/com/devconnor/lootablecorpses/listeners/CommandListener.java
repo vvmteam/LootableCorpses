@@ -1,17 +1,15 @@
-package com.devConnor.lootableCorpses.listeners;
+package com.devconnor.lootablecorpses.listeners;
 
-import com.devConnor.lootableCorpses.LootableCorpses;
-import com.devConnor.lootableCorpses.instances.CorpseRemoveWand;
-import com.devConnor.lootableCorpses.managers.CorpseManager;
-import com.devConnor.lootableCorpses.utils.MessageUtils;
-import org.bukkit.ChatColor;
+import com.devconnor.lootablecorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.instances.CorpseRemoveWand;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.devConnor.lootableCorpses.utils.MessageUtils.sendGreenMessage;
-import static com.devConnor.lootableCorpses.utils.MessageUtils.sendRedMessage;
+import static com.devconnor.lootablecorpses.utils.MessageUtils.sendGreenMessage;
+import static com.devconnor.lootablecorpses.utils.MessageUtils.sendRedMessage;
 
 public class CommandListener implements CommandExecutor {
 

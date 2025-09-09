@@ -1,7 +1,7 @@
-package com.devConnor.lootableCorpses.managers;
+package com.devconnor.lootablecorpses.managers;
 
 import com.comphenix.protocol.events.PacketContainer;
-import com.devConnor.lootableCorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.LootableCorpses;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 

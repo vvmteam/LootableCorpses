@@ -1,16 +1,10 @@
-package com.devConnor.lootableCorpses.listeners;
+package com.devconnor.lootablecorpses.listeners;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.WrappedEnumEntityUseAction;
-import com.devConnor.lootableCorpses.LootableCorpses;
-import com.devConnor.lootableCorpses.instances.CorpseEntity;
-import com.devConnor.lootableCorpses.instances.CorpseGui;
-import com.devConnor.lootableCorpses.managers.CorpseManager;
-import com.devConnor.lootableCorpses.managers.PacketManager;
+import com.devconnor.lootablecorpses.LootableCorpses;
+import com.devconnor.lootablecorpses.instances.CorpseEntity;
+import com.devconnor.lootablecorpses.instances.CorpseGui;
+import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -24,7 +18,6 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.util.RayTraceResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -73,7 +66,7 @@ public class CorpseListener implements Listener {
         }
 
         Block clickedBlock = e.getClickedBlock();
-        if (!clickedBlock.isPassable()) return;
+        if (clickedBlock == null || !clickedBlock.isPassable()) return;
 
         Player player = e.getPlayer();
         CorpseEntity corpseFound = corpseManager.findCorpseInRayTrace(player);
