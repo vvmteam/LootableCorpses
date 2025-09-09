@@ -20,7 +20,7 @@ public class CommandListener implements CommandExecutor {
     public CommandListener(LootableCorpses lootableCorpses, CorpseManager corpseManager) {
         this.lootableCorpses = lootableCorpses;
         this.corpseManager = corpseManager;
-        this.wand = new CorpseRemoveWand(corpseManager);
+        this.wand = new CorpseRemoveWand();
     }
 
     @Override

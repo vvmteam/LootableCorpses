@@ -35,8 +35,7 @@ public class CorpseListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        if (!lootableCorpses.isPluginEnabled()) return;
-        if (e.getKeepInventory()) return;
+        if (!lootableCorpses.isPluginEnabled() || e.getKeepInventory()) return;
 
         Player player = e.getEntity();
         World playerWorld = player.getWorld();

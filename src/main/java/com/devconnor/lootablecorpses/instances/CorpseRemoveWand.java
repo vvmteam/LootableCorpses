@@ -1,6 +1,5 @@
 package com.devconnor.lootablecorpses.instances;
 
-import com.devconnor.lootablecorpses.managers.CorpseManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,14 +10,12 @@ import java.util.Collections;
 
 public class CorpseRemoveWand {
 
-    private final CorpseManager corpseManager;
     private final ItemStack wand;
 
     private static final String WAND_TITLE = ChatColor.RED + ChatColor.BOLD.toString() + "Corpse Remover";
     private static final Material ITEM_TYPE = Material.WOODEN_AXE;
 
-    public CorpseRemoveWand(CorpseManager corpseManager) {
-        this.corpseManager = corpseManager;
+    public CorpseRemoveWand() {
         this.wand = createWand();
     }
 

@@ -1,11 +1,13 @@
 package com.devconnor.lootablecorpses.instances;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 @Getter
+@Slf4j
 public class Armor {
 
     private ItemStack helmet;
@@ -27,10 +29,11 @@ public class Armor {
     public void removeArmor(int slot) {
         ItemStack air = new ItemStack(Material.AIR);
         switch (slot) {
-            case 36: this.boots = air;
-            case 37: this.leggings = air;
-            case 38: this.chestplate = air;
-            case 39: this.helmet = air;
+            case 36 -> this.boots = air;
+            case 37 -> this.leggings = air;
+            case 38 -> this.chestplate = air;
+            case 39 -> this.helmet = air;
+            default -> log.info("Invalid armor slot: {}", slot);
         }
     }
 }

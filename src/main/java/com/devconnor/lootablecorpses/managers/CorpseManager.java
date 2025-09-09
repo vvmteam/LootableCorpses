@@ -42,7 +42,7 @@ public class CorpseManager {
     private final boolean spawnCorpseOnLeaveEnabled;
 
     private final List<String> blackListedWorlds;
-    private final int CORPSE_LIFESPAN_MILLIS;
+    private final int corpseLifespanMillis;
     private final boolean keepCorpsesAboveTheVoid;
     private final boolean dropInvOnDespawn;
 
@@ -59,7 +59,7 @@ public class CorpseManager {
         this.blackListedWorlds = ConfigManager.getBlacklistedWorlds();
         this.dropInvOnDespawn = ConfigManager.shouldDropInvOnDespawn();
 
-        this.CORPSE_LIFESPAN_MILLIS = ConfigManager.getCorpseLifespanMillis();
+        this.corpseLifespanMillis = ConfigManager.getCorpseLifespanMillis();
 
         this.autoRemover.start();
     }
@@ -83,7 +83,7 @@ public class CorpseManager {
         World playerWorld = player.getWorld();
         for (CorpseEntity corpse : corpses) {
             if (corpse.getLocation().getWorld() == playerWorld) {
-                corpse.sendPacketToPlayer(player);
+                corpse.revealToNewPlayer(player);
             }
         }
     }
@@ -118,7 +118,7 @@ public class CorpseManager {
         ArrayList<CorpseEntity> corpseEntitiesToDestroy = new ArrayList<>();
         IntList entityIds = new IntArrayList();
         for (CorpseEntity corpseEntity : corpses) {
-            if (disregardTime || (CORPSE_LIFESPAN_MILLIS != Integer.MIN_VALUE && (System.currentTimeMillis() - corpseEntity.getTimestamp()) >= CORPSE_LIFESPAN_MILLIS)) {
+            if (disregardTime || (corpseLifespanMillis != Integer.MIN_VALUE && (System.currentTimeMillis() - corpseEntity.getTimestamp()) >= corpseLifespanMillis)) {
                 corpseEntitiesToDestroy.add(corpseEntity);
                 entityIds.add(corpseEntity.getId());
             }

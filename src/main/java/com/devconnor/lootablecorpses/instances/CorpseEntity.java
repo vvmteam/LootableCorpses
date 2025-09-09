@@ -2,10 +2,16 @@ package com.devconnor.lootablecorpses.instances;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.Pair;
+import com.comphenix.protocol.wrappers.PlayerInfoData;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.devconnor.lootablecorpses.LootableCorpses;
-import com.devconnor.lootablecorpses.managers.PacketManager;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.minecraft.world.entity.EntityPose;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,12 +27,18 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.devconnor.lootablecorpses.managers.PacketManager.sendPacketsToPlayer;
+import static com.devconnor.lootablecorpses.managers.PacketManager.sendPacketsToServer;
 import static com.devconnor.lootablecorpses.utils.VersionUtils.isVersionAtLeast;
 
+@Slf4j
 public class CorpseEntity {
+
+    private static final String TEXTURES = "textures";
     
     private final LootableCorpses lootableCorpses;
 
@@ -50,23 +62,20 @@ public class CorpseEntity {
 
     private WrappedGameProfile corpse;
 
-    private final ArrayList<PacketContainer> packets;
+    private final List<PacketContainer> packets;
+    private final List<PacketContainer> armorPackets;
     private final EnumWrappers.ItemSlot[] armorSlots;
 
     public CorpseEntity(LootableCorpses lootableCorpses, UUID player, Location deathLocation, PlayerInventory inventory) {
         this.lootableCorpses = lootableCorpses;
 
-        this.id = (int) (Math.random() * Integer.MAX_VALUE);
+        this.id = new Random().nextInt() * Integer.MAX_VALUE;
         this.player = player;
         this.location = deathLocation;
         this.corpseInventory = new CorpseInventory(inventory);
         this.corpseGui = new CorpseGui(this.id, player, this.corpseInventory);
         this.packets = new ArrayList<>();
-
-        this.packets.add(createCorpse());
-        this.packets.add(spawnCorpse());
-        this.packets.add(getMetadataPacket());
-        this.packets.add(getRotationPacket());
+        this.armorPackets = new ArrayList<>();
 
         this.armorSlots = new EnumWrappers.ItemSlot[]{
                 EnumWrappers.ItemSlot.FEET,
@@ -76,7 +85,13 @@ public class CorpseEntity {
         };
         this.timestamp = System.currentTimeMillis();
 
-        sendPackets();
+        this.packets.add(createCorpse());
+        this.packets.add(spawnCorpse());
+        this.packets.add(getMetadataPacket());
+        this.packets.add(getRotationPacket());
+        createArmorPackets();
+
+        sendPacketsToServer(Stream.concat(this.packets.stream(), this.armorPackets.stream()).toList());
     }
 
     private PacketContainer createCorpse() {
@@ -86,11 +101,11 @@ public class CorpseEntity {
         }
 
         WrappedGameProfile corpseProfile = WrappedGameProfile.fromPlayer(corpsePlayer);
-        WrappedSignedProperty textures = corpseProfile.getProperties().get("textures").stream().findFirst().orElse(null);
+        WrappedSignedProperty textures = corpseProfile.getProperties().get(TEXTURES).stream().findFirst().orElse(null);
 
         this.corpse = new WrappedGameProfile(UUID.randomUUID(), corpsePlayer.getName());
         if (textures != null) {
-            corpse.getProperties().put("textures", new WrappedSignedProperty("textures", textures.getValue(), textures.getSignature()));
+            corpse.getProperties().put(TEXTURES, new WrappedSignedProperty(TEXTURES, textures.getValue(), textures.getSignature()));
         }
 
         PlayerInfoData playerInfoData = new PlayerInfoData(
@@ -113,10 +128,11 @@ public class CorpseEntity {
         return playerInfoPacket;
     }
 
+    @SuppressWarnings("java:S1874")
     private PacketContainer spawnCorpse() {
-        boolean isVersionAbove20_2 = isVersionAtLeast("20.2");
+        boolean isVersionAbove20dot2 = isVersionAtLeast("20.2");
         PacketContainer spawnEntityPacket = lootableCorpses.getProtocolManager().createPacket(
-                isVersionAbove20_2 ? PacketType.Play.Server.SPAWN_ENTITY : PacketType.Play.Server.NAMED_ENTITY_SPAWN
+                isVersionAbove20dot2 ? PacketType.Play.Server.SPAWN_ENTITY : PacketType.Play.Server.NAMED_ENTITY_SPAWN
         );
         spawnEntityPacket.getUUIDs().write(0, corpse.getUUID());
         spawnEntityPacket.getIntegers().write(0, this.id);
@@ -129,7 +145,7 @@ public class CorpseEntity {
         spawnEntityPacket.getBytes()
                 .write(0, (byte) ((deathLocation.getYaw() * 256.0F) / 360.0F))
                 .write(1, (byte) -90);
-        if (isVersionAbove20_2) {
+        if (isVersionAbove20dot2) {
             spawnEntityPacket.getEntityTypeModifier().write(0, EntityType.PLAYER);
         }
 
@@ -145,8 +161,11 @@ public class CorpseEntity {
             // Prepare the metadata packet
             PacketContainer metadataPacket = lootableCorpses.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
             List<WrappedDataValue> wrappedDataValues = dataWatcher.getWatchableObjects().stream()
-                    .map(watchableObject -> new WrappedDataValue(watchableObject.getIndex(), watchableObject.getWatcherObject().getSerializer(), watchableObject.getValue()))
-                    .collect(Collectors.toList());
+                    .map(watchableObject -> new WrappedDataValue(
+                            watchableObject.getIndex(),
+                            watchableObject.getWatcherObject().getSerializer(),
+                            watchableObject.getValue()
+                    )).toList();
 
             // Write the entity ID and data
             metadataPacket.getIntegers().write(0, this.id);
@@ -188,15 +207,17 @@ public class CorpseEntity {
         return rotationPacket;
     }
 
-    private PacketContainer getArmorPacket(EnumWrappers.ItemSlot slot, ItemStack item) {
-        PacketContainer packet = lootableCorpses.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT);
+    private void createArmorPackets() {
+        for (int i = 0; i < armorSlots.length; i++) {
+            PacketContainer packet = lootableCorpses.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT);
 
-        packet.getIntegers().write(0, this.id);
-        Pair<EnumWrappers.ItemSlot, ItemStack> pair = new Pair<>(slot, item);
-        List<Pair<EnumWrappers.ItemSlot, ItemStack>> equipmentList = List.of(pair);
-        packet.getSlotStackPairLists().write(0, equipmentList);
+            packet.getIntegers().write(0, this.id);
+            Pair<EnumWrappers.ItemSlot, ItemStack> pair = new Pair<>(armorSlots[i], corpseInventory.getArmor().getArmor()[i]);
+            List<Pair<EnumWrappers.ItemSlot, ItemStack>> equipmentList = List.of(pair);
+            packet.getSlotStackPairLists().write(0, equipmentList);
 
-        return packet;
+            this.armorPackets.add(packet);
+        }
     }
 
     private double getHighestBlock() {
@@ -223,34 +244,13 @@ public class CorpseEntity {
         return 0;
     }
 
-    private void sendPackets() {
-        for (Player p : lootableCorpses.getPlayers()) {
-            sendPacketToPlayer(p);
-        }
-    }
-
-    private void sendArmorPacket(Player p) {
-        for (int i = 0; i < armorSlots.length; i++) {
-            lootableCorpses.getProtocolManager().sendServerPacket(p, getArmorPacket(armorSlots[i], corpseInventory.getArmor().getArmor()[i]));
-        }
-    }
-
-    public void sendPacketToPlayer(Player p) {
-        try {
-            for (PacketContainer packet : packets) {
-                PacketManager.sendPacketToPlayer(p, packet);
-            }
-            sendArmorPacket(p);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void revealToNewPlayer(Player player) {
+        sendPacketsToPlayer(player, this.packets);
     }
 
     public void removeArmor(int slot) {
         corpseInventory.getArmor().removeArmor(slot);
-        for (Player p : lootableCorpses.getPlayers()) {
-            sendArmorPacket(p);
-        }
+        sendPacketsToServer(Stream.concat(this.packets.stream(), this.armorPackets.stream()).toList());
     }
 
     public void dropRemainingInventory() {
