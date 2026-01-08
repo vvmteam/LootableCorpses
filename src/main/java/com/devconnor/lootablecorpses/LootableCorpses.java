@@ -14,7 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class LootableCorpses extends JavaPlugin {
 
@@ -55,8 +56,8 @@ public final class LootableCorpses extends JavaPlugin {
         getCommand("lootablecorpses").setExecutor(new CommandListener(this, corpseManager));
     }
 
-    public Collection<? extends Player> getPlayers() {
-        return Bukkit.getOnlinePlayers();
+    public List<Player> getPlayers() {
+        return new ArrayList<>(Bukkit.getOnlinePlayers());
     }
 
     public void toggle(boolean enable) {

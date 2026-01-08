@@ -1,5 +1,6 @@
 package com.devconnor.lootablecorpses.utils;
 
+import com.comphenix.protocol.utility.MinecraftVersion;
 import org.bukkit.Bukkit;
 
 import java.util.regex.Matcher;
@@ -35,4 +36,12 @@ public class VersionUtils {
         return false;
     }
 
+    public static int getSkinIndex() {
+        MinecraftVersion current = MinecraftVersion.getCurrentVersion();
+        if (current.compareTo(new MinecraftVersion(1, 21, 10)) >= 0) {
+            return 16;
+        }
+
+        return 17;
+    }
 }

@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 
 import static com.devconnor.lootablecorpses.managers.PacketManager.sendPacketsToPlayer;
 import static com.devconnor.lootablecorpses.managers.PacketManager.sendPacketsToServer;
+import static com.devconnor.lootablecorpses.utils.VersionUtils.getSkinIndex;
 import static com.devconnor.lootablecorpses.utils.VersionUtils.isVersionAtLeast;
 
 @Slf4j
@@ -156,7 +157,7 @@ public class CorpseEntity {
         if (isVersionAtLeast("20.1")) {
             WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
             dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(6, WrappedDataWatcher.Registry.get(EntityPose.class)), EntityPose.b);
-            dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(17, WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x7F);
+            dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(getSkinIndex(), WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x7F);
 
             // Prepare the metadata packet
             PacketContainer metadataPacket = lootableCorpses.getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_METADATA);
