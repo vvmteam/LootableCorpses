@@ -27,7 +27,11 @@ public final class LootableCorpses extends JavaPlugin {
     private PacketListener packetListener;
 
     @Getter
-    private boolean isPluginEnabled;
+    private boolean isPluginEnabled = true;
+
+    public boolean isLootingEnabled() {
+        return !ConfigManager.isLootingDisabled();
+    }
 
     @Getter
     private int corpseLifespanAfterInteraction;
@@ -48,10 +52,7 @@ public final class LootableCorpses extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CorpseListener(this, corpseManager), this);
         Bukkit.getPluginManager().registerEvents(new ConnectListener(corpseManager), this);
 
-        this.isPluginEnabled = !ConfigManager.isLootingDisabled();
-        if (this.isPluginEnabled) {
-            this.packetListener.createUseEntityPacketListener();
-        }
+        this.packetListener.createUseEntityPacketListener();
 
         getCommand("lootablecorpses").setExecutor(new CommandListener(this, corpseManager));
     }

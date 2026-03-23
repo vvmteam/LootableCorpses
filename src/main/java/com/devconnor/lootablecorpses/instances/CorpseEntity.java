@@ -12,7 +12,6 @@ import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.devconnor.lootablecorpses.LootableCorpses;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.minecraft.world.entity.EntityPose;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -156,7 +155,7 @@ public class CorpseEntity {
     private PacketContainer getMetadataPacket() {
         if (isVersionAtLeast("20.1")) {
             WrappedDataWatcher dataWatcher = new WrappedDataWatcher();
-            dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(6, WrappedDataWatcher.Registry.get(EntityPose.class)), EntityPose.b);
+            dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(6, WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass())), EnumWrappers.EntityPose.SLEEPING.toNms());
             dataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(getSkinIndex(), WrappedDataWatcher.Registry.get(Byte.class)), (byte) 0x7F);
 
             // Prepare the metadata packet
@@ -180,8 +179,8 @@ public class CorpseEntity {
             List<WrappedDataValue> wrappedDataValues = new ArrayList<>();
 
             WrappedDataWatcher.WrappedDataWatcherObject poseObject = new WrappedDataWatcher.WrappedDataWatcherObject(
-                    6, WrappedDataWatcher.Registry.get(EntityPose.class));
-            WrappedDataValue poseValue = new WrappedDataValue(poseObject.getIndex(), poseObject.getSerializer(), EntityPose.b);
+                    6, WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass()));
+            WrappedDataValue poseValue = new WrappedDataValue(poseObject.getIndex(), poseObject.getSerializer(), EnumWrappers.EntityPose.SLEEPING.toNms());
             wrappedDataValues.add(poseValue);
 
             WrappedDataWatcher.WrappedDataWatcherObject skinPartsObject = new WrappedDataWatcher.WrappedDataWatcherObject(
@@ -255,6 +254,7 @@ public class CorpseEntity {
     }
 
     public void dropRemainingInventory() {
+        if (!lootableCorpses.isLootingEnabled()) return;
         if (location.getWorld() == null) return;
 
         ItemStack[] inventory = corpseGui.getGui().getStorageContents();

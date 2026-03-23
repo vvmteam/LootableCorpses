@@ -42,6 +42,8 @@ public class PacketListener {
                     return;
                 }
 
+                if (!lootableCorpses.isLootingEnabled()) return;
+
                 Bukkit.getScheduler().runTask(lootableCorpses, () -> corpseManager.createNewCorpseGui(player, corpseEntity));
             }
         });

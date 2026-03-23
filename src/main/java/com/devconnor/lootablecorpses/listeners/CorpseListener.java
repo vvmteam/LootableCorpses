@@ -41,13 +41,14 @@ public class CorpseListener implements Listener {
         World playerWorld = player.getWorld();
         if (corpseManager.isWorldBlacklisted(playerWorld.getName())) return;
 
-        PlayerInventory inventory = player.getInventory();
-        List<ItemStack> drops = e.getDrops();
-        Set<ItemStack> dropSet = new HashSet<>(drops);
-        drops.clear();
-        for (int i = 0; i <= 40; i++) {
-            if (!dropSet.contains(inventory.getItem(i))) {
-                inventory.clear(i);
+        if (lootableCorpses.isLootingEnabled()) {
+            List<ItemStack> drops = e.getDrops();
+            Set<ItemStack> dropSet = new HashSet<>(drops);
+            drops.clear();
+            for (int i = 0; i <= 40; i++) {
+                if (!dropSet.contains(inventory.getItem(i))) {
+                    inventory.clear(i);
+                }
             }
         }
         corpseManager.createCorpse(player, inventory);
@@ -60,6 +61,7 @@ public class CorpseListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (!lootableCorpses.isPluginEnabled()) return;
+        if (!lootableCorpses.isLootingEnabled()) return;
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
