@@ -33,16 +33,22 @@ jobs:
         wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O BuildTools.jar
         java -jar BuildTools.jar --rev 1.21.11
 
-    - name: Install Spigot to local Maven
+    - name: Install Spigot & API to local Maven
       run: |
-        cd buildtools
-        SPIGOT_JAR=$(ls spigot-*.jar | head -n 1)
+        # Tìm file jar thực tế trong thư mục buildtools
+        SPIGOT_JAR=$(ls buildtools/spigot-*.jar | head -n 1)
+        echo "Installing $SPIGOT_JAR to local Maven repository..."
+        
+        # Cài đặt dưới nhãn spigot (Core/NMS)
         mvn install:install-file -Dfile=$SPIGOT_JAR -DgroupId=org.spigotmc -DartifactId=spigot -Dversion=1.21.11-R0.1-SNAPSHOT -Dpackaging=jar
+        
+        # Cài đặt dưới nhãn spigot-api (Để fix lỗi package org.bukkit does not exist)
+        mvn install:install-file -Dfile=$SPIGOT_JAR -DgroupId=org.spigotmc -DartifactId=spigot-api -Dversion=1.21.11-R0.1-SNAPSHOT -Dpackaging=jar
 
     - name: Download and Install ProtocolLib manually
       run: |
-        wget https://github.com/dmulloy2/ProtocolLib/releases/download/5.4.0/ProtocolLib.jar -O ProtocolLib.jar
-        mvn install:install-file -Dfile=ProtocolLib.jar -DgroupId=com.comphenix.protocol -DartifactId=ProtocolLib -Dversion=5.4.0 -Dpackaging=jar
+        wget https://github.com/dmulloy2/ProtocolLib/releases/download/5.2.0/ProtocolLib.jar -O ProtocolLib.jar
+        mvn install:install-file -Dfile=ProtocolLib.jar -DgroupId=com.comphenix.protocol -DartifactId=ProtocolLib -Dversion=5.2.0 -Dpackaging=jar
 
     - name: Build with Maven
       run: mvn clean package
