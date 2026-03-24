@@ -18,10 +18,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Build Spigot 1.21.11 with BuildTools
+      run: |
+        mkdir buildtools
+        cd buildtools
+        wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        java -jar BuildTools.jar --rev latest
+
     - name: Download and Install ProtocolLib manually
       run: |
-        wget https://github.com/dmulloy2/ProtocolLib/releases/download/5.4.0/ProtocolLib.jar -O ProtocolLib.jar
-        mvn install:install-file -Dfile=ProtocolLib.jar -DgroupId=com.comphenix.protocol -DartifactId=ProtocolLib -Dversion=5.4.0 -Dpackaging=jar
+        wget https://github.com/dmulloy2/ProtocolLib/releases/download/5.2.0/ProtocolLib.jar -O ProtocolLib.jar
+        mvn install:install-file -Dfile=ProtocolLib.jar -DgroupId=com.comphenix.protocol -DartifactId=ProtocolLib -Dversion=5.2.0 -Dpackaging=jar
 
     - name: Build with Maven
       run: mvn clean package
