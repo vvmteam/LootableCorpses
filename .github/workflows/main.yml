@@ -22,7 +22,7 @@ jobs:
       id: cache-spigot
       uses: actions/cache@v4
       with:
-        path: buildtools/spigot-1.21.11-R0.1-SNAPSHOT.jar
+        path: buildtools/spigot-*.jar
         key: spigot-build-1.21.11
 
     - name: Run BuildTools (Only if not cached)
@@ -36,7 +36,8 @@ jobs:
     - name: Install Spigot to local Maven
       run: |
         cd buildtools
-        mvn install:install-file -Dfile=spigot-1.21.11-R0.1-SNAPSHOT.jar -DgroupId=org.spigotmc -DartifactId=spigot -Dversion=1.21.11-R0.1-SNAPSHOT -Dpackaging=jar
+        SPIGOT_JAR=$(ls spigot-*.jar | head -n 1)
+        mvn install:install-file -Dfile=$SPIGOT_JAR -DgroupId=org.spigotmc -DartifactId=spigot -Dversion=1.21.11-R0.1-SNAPSHOT -Dpackaging=jar
 
     - name: Download and Install ProtocolLib manually
       run: |
