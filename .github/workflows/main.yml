@@ -18,12 +18,25 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Build Spigot 1.21.11 with BuildTools
+    - name: Cache Spigot File
+      id: cache-spigot
+      uses: actions/cache@v4
+      with:
+        path: buildtools/spigot-1.21.11-R0.1-SNAPSHOT.jar
+        key: spigot-build-1.21.11
+
+    - name: Run BuildTools (Only if not cached)
+      if: steps.cache-spigot.outputs.cache-hit != 'true'
       run: |
-        mkdir buildtools
+        mkdir -p buildtools
         cd buildtools
-        wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -O BuildTools.jar
         java -jar BuildTools.jar --rev 1.21.11
+
+    - name: Install Spigot to local Maven
+      run: |
+        cd buildtools
+        mvn install:install-file -Dfile=spigot-1.21.11-R0.1-SNAPSHOT.jar -DgroupId=org.spigotmc -DartifactId=spigot -Dversion=1.21.11-R0.1-SNAPSHOT -Dpackaging=jar
 
     - name: Download and Install ProtocolLib manually
       run: |
