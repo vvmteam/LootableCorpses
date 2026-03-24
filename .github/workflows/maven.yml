@@ -18,7 +18,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Build with Maven
+    - name: Build with Mavenn
       run: mvn clean package
 
     - name: Upload Artifact
